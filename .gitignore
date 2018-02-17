@@ -1,3 +1,6 @@
+# tests
+examples/tests
+
 # Logs
 logs
 *.log
