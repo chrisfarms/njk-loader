@@ -98,8 +98,10 @@ async function pitch(ctx, opts, _remainingRequest) {
   }
   const resolvedPath = await resolvePath(ctx, opts, ctx.resourcePath, []);
   const templates = await getTemplatePaths(ctx, opts, resolvedPath, []);
+  const configure = opts.configure ? `import configure from '${opts.configure}'` : `function configure(env) {return env}`;
   const outputSource = `
     import { Environment } from '${ctx.data.runtimePath}';
+    ${configure};
     const templates = {
       ${Object.keys(templates).map(name => `
         "${name}": require('${templates[name]}?mode=compile')
@@ -143,11 +145,12 @@ async function pitch(ctx, opts, _remainingRequest) {
       return [parentName, templateName].join(':');
     }
     const hmrThing = '${new Date()}';
+    const env = new Environment(new Loader(), {
+      autoescape: true,
+      opts: {dev: true}
+    });
+    configure(env);
     export function render(o) {
-      const env = new Environment(new Loader(), {
-        autoescape: true,
-        opts: {dev: true}
-      });
       return env.render('${ctx.resourcePath}', o);
     }
     export default {render};
