@@ -190,6 +190,7 @@ function getEnvironmentOptions(opts) {
     autoescape: opts.autoescape === false ? false : true,
     throwOnUndefined: opts.throwOnUndefined === true,
     trimBlocks: opts.trimBlocks === true,
+    lstripBlocks: opts.lstripBlocks === true,
     opts: {},
   };
   if (opts.tags) {

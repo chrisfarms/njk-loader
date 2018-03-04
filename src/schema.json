@@ -19,6 +19,9 @@
     "trimBlocks": {
       "type": "boolean"
     },
+    "lstripBlocks": {
+      "type": "boolean"
+    },
     "tags": {
       "type": "object",
       "properties": {
