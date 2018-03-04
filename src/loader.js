@@ -29,6 +29,7 @@ async function _resolvePath(ctx, opts, templatePath, context) {
 
 async function resolvePath(ctx, opts, templatePath, context) {
   if (!templatePath) {
+    /* istanbul ignore next */
     throw new Error(`Can't resolve path: ""`);
   }
   let _err;
@@ -43,6 +44,7 @@ async function resolvePath(ctx, opts, templatePath, context) {
     case '.':
       return _resolvePath(ctx, opts, templatePath, context);
     default:
+      /* istanbul ignore if */
       if (opts.includePaths.length === 0) {
         throw new Error(`Can't resolve "${templatePath}". HINT: use relative imports ('./') or node_modules imports ('~') or set 'includePaths' option to add search paths`);
       }
@@ -52,10 +54,13 @@ async function resolvePath(ctx, opts, templatePath, context) {
           // eslint-disable-next-line no-await-in-loop
           return await _resolvePath(ctx, opts, path.join(root, templatePath), context);
         } catch (err) {
+          /* istanbul ignore next */
           _err = err;
+          /* istanbul ignore next */
           continue;
         }
       }
+      /* istanbul ignore next */
       throw new Error(`Can't resolve "${templatePath}" from "${context.reverse().join(' from ')}" in any of [\n  ${opts.includePaths.join(',\n  ')}\n]: ${_err.message || _err}`);
   }
 }
@@ -75,12 +80,14 @@ async function getTemplatePaths(ctx, opts, templatePath, context) {
   ast.findAll(nodes.Import, templateNodes);
   for (let i = 0; i < templateNodes.length; i++) {
     const templateNode = templateNodes[i].template;
+    /* istanbul ignore if */
     if (!templateNode || !templateNode.value) {
       throw new Error(`bad template path in ${ctx.resourcePath}: ${JSON.stringify(templateNodes[i])}`);
     }
     // eslint-disable-next-line no-await-in-loop
     const children = await getTemplatePaths(ctx, opts, templateNode.value, context.concat(templatePath));
     for (const k in children) {
+      /* istanbul ignore if */
       if (templates[k] && templates[k] !== children[k]) {
         throw new Error(`ambiguous template name: "${k}" refers to\n${templates[k]}\n AND \n${children[k]}\nUnfortunatly this is a shortcoming of the njk-loader.`);
       }

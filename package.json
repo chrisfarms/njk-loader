@@ -6,6 +6,7 @@
   "main": "./src/loader.js",
   "repository": "https://github.com/chrisfarms/njk-loader",
   "scripts": {
+    "test-with-coverage": "nyc --include src --branches 100 --lines 100 --functions 100 --statements 100 --check-coverage --clean npm test",
     "test": "npm -s run test-build && npm -s run test-node && npm -s run test-browser",
     "test-build": "webpack --config examples/test.config.js",
     "test-node": "for t in examples/tests/*.node.js; do node $t | faucet; done",
@@ -20,6 +21,7 @@
     "glob": "^7.1.2",
     "html-loader": "^0.5.5",
     "nunjucks": "^3.0.1",
+    "nyc": "^11.4.1",
     "proclaim": "^3.5.1",
     "raw-loader": "^0.5.1",
     "webpack": "^4.0.0-beta.0",
