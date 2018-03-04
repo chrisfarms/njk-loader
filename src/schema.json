@@ -16,6 +16,9 @@
     "throwOnUndefined": {
       "type": "boolean"
     },
+    "trimBlocks": {
+      "type": "boolean"
+    },
     "tags": {
       "type": "object",
       "properties": {

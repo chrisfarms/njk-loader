@@ -189,6 +189,7 @@ function getEnvironmentOptions(opts) {
   const environmentOptions = {
     autoescape: opts.autoescape === false ? false : true,
     throwOnUndefined: opts.throwOnUndefined === true,
+    trimBlocks: opts.trimBlocks === true,
     opts: {},
   };
   if (opts.tags) {
