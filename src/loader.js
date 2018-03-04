@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const {getOptions} = require('loader-utils');
+const {getOptions,parseQuery} = require('loader-utils');
 const validateOptions = require('schema-utils');
 const nunjucks = require('nunjucks');
 const {transform} = require('nunjucks/src/transformer');
@@ -105,7 +105,7 @@ async function pitch(ctx, opts, _remainingRequest) {
     ${configure};
     const templates = {
       ${Object.keys(templates).map(name => `
-        "${name}": require('${templates[name]}?mode=compile')
+        "${name}": require('${templates[name]}?mode=compile&name=${name}')
       `).join(',')}
     }
     function Loader(){};
@@ -173,7 +173,7 @@ async function load(ctx, opts, source, _map, _meta) {
   }
 
   source = nunjucks.precompileString(source, {
-    name: ctx.resourcePath,
+    name: opts.name || ctx.resourcePath,
     wrapper: (templates, _opts) => {
       return `
         const { runtime } = require('${ctx.data.runtimePath}');
@@ -210,8 +210,10 @@ function getOpts(ctx) {
     opts.includePaths = [];
   }
   validateOptions(optionsSchema, opts, 'njk-loader');
-  if (/mode=compile/.test(ctx.resourceQuery)) {
-    opts.mode = 'compile';
+  if (ctx.resourceQuery) {
+    const params = parseQuery(ctx.resourceQuery);
+    opts.mode = params.mode;
+    opts.name = params.name;
   }
   return opts;
 }
