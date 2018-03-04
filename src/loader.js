@@ -187,7 +187,7 @@ async function load(ctx, opts, source, _map, _meta) {
 
 function getEnvironmentOptions(opts) {
   const environmentOptions = {
-    autoescape: true,
+    autoescape: opts.autoescape === false ? false : true,
     opts: {},
   };
   if (opts.tags) {
