@@ -9,6 +9,35 @@
       "items": {
         "type": "string"
       }
+    },
+    "tags": {
+      "type": "object",
+      "properties": {
+        "blockStart": {
+          "type": "string",
+          "minLength": 1
+        },
+        "blockEnd": {
+          "type": "string",
+          "minLength": 1
+        },
+        "variableStart": {
+          "type": "string",
+          "minLength": 1
+        },
+        "variableEnd": {
+          "type": "string",
+          "minLength": 1
+        },
+        "commentStart": {
+          "type": "string",
+          "minLength": 1
+        },
+        "commentEnd": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
     }
   },
   "additionalProperties": false

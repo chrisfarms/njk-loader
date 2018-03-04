@@ -4,6 +4,7 @@ const {getOptions} = require('loader-utils');
 const validateOptions = require('schema-utils');
 const nunjucks = require('nunjucks');
 const {transform} = require('nunjucks/src/transformer');
+const {Environment} = require('nunjucks/src/environment');
 const nodes = require('nunjucks/src/nodes');
 const optionsSchema = require('./schema.json');
 
@@ -144,12 +145,11 @@ async function pitch(ctx, opts, _remainingRequest) {
     Loader.prototype.resolve = function(parentName, templateName) {
       return [parentName, templateName].join(':');
     }
+
     const hmrThing = '${new Date()}';
-    const env = new Environment(new Loader(), {
-      autoescape: true,
-      opts: {dev: true}
-    });
+    const env = new Environment(new Loader(), ${JSON.stringify(getEnvironmentOptions(opts))});
     configure(env);
+
     export function render(o) {
       return env.render('${ctx.resourcePath}', o);
     }
@@ -171,7 +171,6 @@ async function load(ctx, opts, source, _map, _meta) {
 
   source = nunjucks.precompileString(source, {
     name: ctx.resourcePath,
-    autoescape: true,
     wrapper: (templates, _opts) => {
       return `
         const { runtime } = require('${ctx.data.runtimePath}');
@@ -179,10 +178,24 @@ async function load(ctx, opts, source, _map, _meta) {
           ${templates[0].template};
         })();
       `;
-    }
+    },
+    env: new Environment([], getEnvironmentOptions(opts)),
   });
+
   return {source};
 }
+
+function getEnvironmentOptions(opts) {
+  const environmentOptions = {
+    autoescape: true,
+    opts: {},
+  };
+  if (opts.tags) {
+    environmentOptions.tags = opts.tags
+  }
+  return environmentOptions;
+}
+
 
 function getOpts(ctx) {
   const loaderOpts = getOptions(ctx);
