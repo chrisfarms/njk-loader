@@ -1,7 +1,7 @@
 {
   "name": "njk-loader",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "webpack loader to bundle nunjucks templates",
   "main": "./src/loader.js",
   "repository": "https://github.com/chrisfarms/njk-loader",
