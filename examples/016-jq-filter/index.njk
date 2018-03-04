@@ -1,0 +1,1 @@
+{{ data | jq("people[?general.id>=`100`].general.{ident: id, firstName: name, x: 'hi'=='hi'}") | dump }}
