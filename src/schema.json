@@ -13,6 +13,9 @@
     "autoescape": {
       "type": "boolean"
     },
+    "throwOnUndefined": {
+      "type": "boolean"
+    },
     "tags": {
       "type": "object",
       "properties": {
