@@ -1,9 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 const {getOptions} = require('loader-utils');
+const validateOptions = require('schema-utils');
 const nunjucks = require('nunjucks');
 const {transform} = require('nunjucks/src/transformer');
 const nodes = require('nunjucks/src/nodes');
+const optionsSchema = require('./schema.json');
 
 async function _resolvePath(ctx, opts, templatePath, context) {
   let parentPath;
@@ -182,11 +184,12 @@ async function load(ctx, opts, source, _map, _meta) {
 function getOpts(ctx) {
   const loaderOpts = getOptions(ctx);
   const opts = {...loaderOpts};
-  if (/mode=compile/.test(ctx.resourceQuery)) {
-    opts.mode = 'compile';
-  }
   if (!Array.isArray(opts.includePaths)) {
     opts.includePaths = [];
+  }
+  validateOptions(optionsSchema, opts, 'njk-loader');
+  if (/mode=compile/.test(ctx.resourceQuery)) {
+    opts.mode = 'compile';
   }
   return opts;
 }
