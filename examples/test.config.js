@@ -2,7 +2,7 @@ const path = require('path');
 const merge = require('webpack-merge');
 const glob = require('glob');
 
-module.exports = glob.sync(path.resolve(__dirname, '**/webpack.config.js')).reduce((cfgs, f) => {
+module.exports = glob.sync(path.resolve(__dirname, (process.env.TEST_FOCUS || '') + '**/webpack.config.js')).reduce((cfgs, f) => {
   const name = path.dirname(f);
 
   const common = merge({
