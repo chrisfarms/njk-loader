@@ -135,7 +135,7 @@ async function pitch(ctx, opts, _remainingRequest) {
         };
       }
       if (typeof tmpl !== 'object' || !tmpl.root) {
-        throw new Error('error loading precompiled template:\\n    expected: a precompiled object\\n    received: ' + JSON.stringify(tmpl) + '\\nmaybe another webpack loader messed with the source');
+        throw new Error('error loading precompiled template:\\n    expected: a precompiled object\\n    received: ' + JSON.stringify(tmpl) + '\\nmaybe another webpack loader modified the source');
       }
       return {
         src: {
@@ -167,11 +167,12 @@ async function pitch(ctx, opts, _remainingRequest) {
 
 // eslint-disable-next-line max-params
 async function load(ctx, opts, source, _map, _meta) {
+  /* istanbul ignore if */
   if (opts.mode !== 'compile') {
     throw new Error('njk-loader: pitch failed to prevent loader - this should never happen');
   }
 
-  // If we're not the first loader or precompiile is disabled, then we can't precompile or use slim
+  // If we're not the first loader or precompile is disabled, then we can't precompile or use slim
   if (opts.precompile === false || ctx.loaderIndex !== ctx.loaders.length - 1) {
     if (opts.precompile === true) {
       throw new Error(`njk-loader: cannot load ${ctx.resourcePath} because fallback to runtime compilation is disabled by precompile:true. use precompile:'auto' or ensure njk-loader is the first loader to run`);
