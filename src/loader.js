@@ -164,8 +164,11 @@ async function load(ctx, opts, source, _map, _meta) {
     throw new Error('njk-loader: pitch failed to prevent loader - this should never happen');
   }
 
-  // If we're not the first loader, then we can't precompile or use slim
-  if (ctx.loaderIndex !== ctx.loaders.length - 1) {
+  // If we're not the first loader or precompiile is disabled, then we can't precompile or use slim
+  if (opts.precompile === false || ctx.loaderIndex !== ctx.loaders.length - 1) {
+    if (opts.precompile === true) {
+      throw new Error(`njk-loader: cannot load ${ctx.resourcePath} because fallback to runtime compilation is disabled by precompile:true. use precompile:'auto' or ensure njk-loader is the first loader to run`);
+    }
     return {source};
   }
 
