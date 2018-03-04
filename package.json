@@ -20,6 +20,7 @@
     "file-loader": "^1.1.6",
     "glob": "^7.1.2",
     "html-loader": "^0.5.5",
+    "jmespath": "^0.15.0",
     "nunjucks": "^3.0.1",
     "nyc": "^11.4.1",
     "proclaim": "^3.5.1",
